@@ -1,0 +1,79 @@
+# ================================================================
+# docker-compose.yml — Orkestrasi production di VPS
+#
+# Services:
+#   postgres → Database PostgreSQL 16
+#   migrate  → Jalankan prisma migrate deploy (sekali, lalu exit)
+#   web      → Aplikasi Next.js (start setelah migrate selesai)
+#
+# Cara deploy:
+#   docker compose up -d --build
+# ================================================================
+
+services:
+
+  # ── PostgreSQL Database ────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: porto_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB:       ${POSTGRES_DB:-porto_db}
+      POSTGRES_USER:     ${POSTGRES_USER:-porto_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD wajib diisi di .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test:     ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-porto_user} -d ${POSTGRES_DB:-porto_db}"]
+      interval: 10s
+      timeout:  5s
+      retries:  5
+    networks:
+      - porto_network
+
+  # ── Database Migration (jalankan sekali lalu exit) ────────────
+  migrate:
+    build:
+      context:    .
+      dockerfile: Dockerfile
+      target:     migration          # Pakai stage 'migration' yang ringan
+    environment:
+      DATABASE_URL: ${DATABASE_URL:?DATABASE_URL wajib diisi di .env}
+    depends_on:
+      postgres:
+        condition: service_healthy   # Tunggu postgres siap dulu
+    networks:
+      - porto_network
+    restart: "no"                    # Jangan restart setelah selesai
+
+  # ── Next.js Web Application ────────────────────────────────────
+  web:
+    build:
+      context:    .
+      dockerfile: Dockerfile
+      target:     runner             # Pakai stage 'runner' yang ramping
+    container_name: porto_web
+    restart: unless-stopped
+    environment:
+      DATABASE_URL:  ${DATABASE_URL:?DATABASE_URL wajib diisi di .env}
+      AUTH_SECRET:   ${AUTH_SECRET:?AUTH_SECRET wajib diisi di .env}
+      NEXTAUTH_URL:  ${NEXTAUTH_URL:-https://yourdomain.com}
+    ports:
+      - "3000:3000"                  # Nginx di host akan proxy ke port ini
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully  # Tunggu migrate selesai
+    networks:
+      - porto_network
+
+# ── Volumes & Networks ─────────────────────────────────────────────
+volumes:
+  postgres_data:
+    name: porto_postgres_data        # Data DB persisten (aman saat container restart)
+
+networks:
+  porto_network:
+    driver: bridge
+    name:   porto_network

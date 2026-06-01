@@ -1,0 +1,73 @@
+// ============================================================
+// schema.prisma — Database schema untuk Portfolio + Blog
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Enum ────────────────────────────────────────────────────
+
+enum Role {
+  ADMIN
+  EDITOR
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+}
+
+// ─── Models ──────────────────────────────────────────────────
+
+/// User: Penulis / Admin yang bisa login ke dashboard
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String   // bcrypt hash
+  name      String
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  posts Post[]
+}
+
+/// Project: Menggantikan konstanta PROJECTS yang hardcoded
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  subtitle    String
+  description String
+  domain      String   // e.g. "Industrial IoT", "B2B E-Commerce"
+  highlights  String[] // Array of bullet point highlights
+  tech        String[] // Array of tech names
+  gradient    String   // Tailwind gradient class, e.g. "from-amber-500 to-orange-600"
+  icon        String   // Emoji icon
+  order       Int      @default(0) // Urutan tampil di halaman
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+/// Post: Artikel Blog (konten disimpan dalam format Markdown)
+model Post {
+  id          String     @id @default(cuid())
+  title       String
+  slug        String     @unique
+  excerpt     String     // Ringkasan singkat (untuk card preview)
+  content     String     // Konten penuh dalam format Markdown
+  coverImage  String?    // URL gambar cover (opsional)
+  status      PostStatus @default(DRAFT)
+  tags        String[]   // Array of tag strings
+  publishedAt DateTime?  // Diisi saat status berubah ke PUBLISHED
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String
+}

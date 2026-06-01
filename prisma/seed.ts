@@ -1,0 +1,130 @@
+/**
+ * prisma/seed.ts — Data awal (seed) untuk database
+ *
+ * Perintah untuk menjalankan:
+ *   npx prisma db seed
+ *
+ * Script ini akan mengisi database dengan:
+ *   - 1 user Admin default
+ *   - 4 Project dari data yang sebelumnya hardcoded di Projects.tsx
+ */
+
+import { PrismaClient } from "@prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
+import bcrypt from "bcryptjs";
+
+const connectionString = process.env.DATABASE_URL ?? "";
+const adapter = new PrismaPg({ connectionString });
+const prisma = new PrismaClient({ adapter });
+
+async function main() {
+  console.log("🌱 Mulai proses seeding...");
+
+  // ── 1. Admin User ─────────────────────────────────────────────
+  const admin = await prisma.user.upsert({
+    where: { email: "admin@portfolio.dev" },
+    update: {},
+    create: {
+      email:    "admin@portfolio.dev",
+      name:     "Vindy",
+      password: await bcrypt.hash("ganti-password-ini", 12),
+      role:     "ADMIN",
+    },
+  });
+  console.log(`✅ User admin dibuat: ${admin.email}`);
+
+  // ── 2. Projects (dari data CV Vindy Pratama) ───────────────
+  const projects = [
+    {
+      domain: "B2B E-Commerce",
+      title: "SIPLah Gramedia & SSIS",
+      subtitle: "National School Procurement & Internal ERP Platforms",
+      description:
+        "Two large-scale B2B systems at Kompas Gramedia: SIPLah (Sistem Informasi Pengadaan di Sekolah) for Indonesia's school procurement market, and SSIS (internal ERP) for omnichannel order processing, real-time inventory, production workflows, and financial modules including partner payables and commission routing.",
+      highlights: [
+        "Multi-role order lifecycle: school admin → approval chain → vendor fulfillment → finance reconciliation",
+        "Complex integrations for payment and logistics gateways",
+        "Internal ERP modules: omnichannel orders, inventory, production, financial (payables, commissions)",
+        "Scalable multi-tenant architecture supporting regional procurement offices",
+      ],
+      tech: ["PHP", "Node.js", "MySQL", "REST API", "Redis", "Docker"],
+      gradient: "from-indigo-500 to-purple-600",
+      icon: "🛒",
+      order: 1,
+    },
+    {
+      domain: "Industrial IoT",
+      title: "IoT Energy Monitoring",
+      subtitle: "Schneider Meter Real-Time Energy Monitoring System",
+      description:
+        "A real-time IoT energy monitoring platform for Schneider meters at Kompas Gramedia. Built a concurrent Modbus TCP/RTU data collector service in Golang with interactive frontend dashboards to visualize time-series energy data across production facilities.",
+      highlights: [
+        "Concurrent Modbus TCP/RTU data collector service in Golang",
+        "Real-time energy consumption dashboards for Schneider meters",
+        "TimescaleDB integration for efficient time-series data storage",
+        "Nginx reverse proxy configuration for high-performance traffic routing",
+      ],
+      tech: ["Golang", "Modbus Protocol", "PostgreSQL", "TimescaleDB", "WebSocket", "Docker"],
+      gradient: "from-amber-500 to-orange-600",
+      icon: "⚡",
+      order: 2,
+    },
+    {
+      domain: "Industrial IoT",
+      title: "Big Horn Guard",
+      subtitle: "Crude Oil Production Monitoring System",
+      description:
+        "An end-to-end IIoT platform for real-time monitoring of crude oil production facilities, developed at PT. AEON Riset & Teknologi. The Node.js server communicates directly with field hardware over the Modbus protocol, ingesting high-frequency sensor telemetry and surfacing it through a live operator dashboard with sub-second response times.",
+      highlights: [
+        "Self-contained edge computing application ensuring 24/7 high-availability on industrial PCs",
+        "Modbus protocol communication with PLCs for pressure, temperature, mass flow, density, and separator readings",
+        "High-concurrency data streaming via HTTP/WebSocket with sub-second response times",
+        "Advanced MySQL indexing and data-retention patterns for historical analysis",
+      ],
+      tech: ["Node.js", "Modbus Protocol", "MySQL", "WebSocket", "React", "Edge Computing"],
+      gradient: "from-emerald-500 to-teal-600",
+      icon: "🛢️",
+      order: 3,
+    },
+    {
+      domain: "Enterprise WMS",
+      title: "Warehouse Management System",
+      subtitle: "Multi-Tenant WMS with RBAC & Secure REST API",
+      description:
+        "A multi-tenant Warehouse Management System with a secure REST API built using Golang (Fiber) with JWT authentication. Features a comprehensive administrative web portal with dynamic Role-Based Access Control (RBAC) and customized user permissions for distributed logistics operations.",
+      highlights: [
+        "Secure REST API using Golang (Fiber) with JWT authentication",
+        "Dynamic RBAC with customized user permissions via admin portal",
+        "Complex relational database schema design for inventory, receiving, putaway, picking, and dispatch",
+        "Multi-tenant architecture with strict data isolation per organization",
+      ],
+      tech: ["Golang", "Fiber", "MySQL", "JWT", "RBAC", "REST API"],
+      gradient: "from-rose-500 to-pink-600",
+      icon: "🏭",
+      order: 4,
+    },
+  ];
+
+  for (const project of projects) {
+    const existing = await prisma.project.findFirst({
+      where: { title: project.title },
+    });
+    if (!existing) {
+      await prisma.project.create({ data: project });
+      console.log(`✅ Project dibuat: ${project.title}`);
+    } else {
+      console.log(`⏭️  Project sudah ada: ${project.title}`);
+    }
+  }
+
+  console.log("\n🎉 Seeding selesai!");
+}
+
+main()
+  .catch((e) => {
+    console.error("❌ Error saat seeding:", e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

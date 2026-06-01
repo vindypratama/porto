@@ -1,0 +1,46 @@
+# ================================================================
+# .dockerignore — File yang TIDAK dimasukkan ke dalam Docker image
+# ================================================================
+
+# Node modules (diinstall ulang di dalam container)
+node_modules
+npm-debug.log*
+
+# Next.js build output lokal
+.next
+out
+
+# Environment files (JANGAN pernah masukkan ke image!)
+.env
+.env.local
+.env.development
+.env.*.local
+
+# Git
+.git
+.gitignore
+
+# Development files
+*.md
+ROADMAP.md
+docker-compose.dev.yml
+.dockerignore
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Prisma generated (akan digenerate saat build)
+prisma/migrations/.gitkeep
+
+# Test files
+__tests__
+*.test.*
+*.spec.*
+coverage

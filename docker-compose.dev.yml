@@ -1,0 +1,30 @@
+# ============================================================
+# docker-compose.dev.yml — PostgreSQL untuk development lokal
+# ============================================================
+# Cara pakai:
+#   docker compose -f docker-compose.dev.yml up -d
+#   docker compose -f docker-compose.dev.yml down
+# ============================================================
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: porto_postgres_dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: porto_db
+      POSTGRES_USER: porto_user
+      POSTGRES_PASSWORD: porto_dev_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U porto_user -d porto_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_dev_data:
+    name: porto_postgres_dev_data
