@@ -1,5 +1,5 @@
 /**
- * middleware.ts — Proteksi route /admin/*
+ * proxy.ts — Proteksi route /admin/*
  *
  * Semua route yang diawali /admin (kecuali /admin/login) membutuhkan
  * sesi Auth.js yang valid. Jika tidak ada sesi, redirect ke /admin/login.
