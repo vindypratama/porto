@@ -112,6 +112,13 @@ npx prisma migrate dev --name init
 npm run db:seed
 ```
 
+> **Alternatif jika `migrate dev` gagal** (error CREATEDB permission):
+> ```powershell
+> npx prisma db push
+> npm run db:seed
+> ```
+> `prisma db push` langsung sync schema ke database tanpa membuat shadow database.
+
 > Ganti password admin sebelum seed! Buka `prisma/seed.ts` dan ubah:
 > ```ts
 > password: await bcrypt.hash("GANTI-PASSWORD-KAMU", 12),
@@ -172,6 +179,8 @@ AUTH_SECRET="ganti-dengan-random-string-minimal-32-karakter"
 NEXTAUTH_URL="http://localhost:3000"
 ```
 
+> **Catatan:** Jika port 5432 sudah digunakan oleh PostgreSQL lokal, ganti mapping port di `docker-compose.dev.yml` menjadi `"5433:5432"` dan sesuaikan DATABASE_URL ke port 5433.
+
 ### 2.4 Jalankan PostgreSQL via Docker
 
 ```powershell
@@ -187,6 +196,12 @@ Container `porto_postgres_dev` harus berstatus `Up`.
 npx prisma migrate dev --name init
 npm run db:seed
 ```
+
+> **Alternatif jika `migrate dev` gagal** (error CREATEDB):
+> ```powershell
+> npx prisma db push
+> npm run db:seed
+> ```
 
 ### 2.6 Jalankan Development Server
 
@@ -313,6 +328,12 @@ NEXTAUTH_URL="http://localhost:3000"
 npx prisma migrate dev --name init
 npm run db:seed
 ```
+
+> **Alternatif jika `migrate dev` gagal** (error CREATEDB):
+> ```bash
+> npx prisma db push
+> npm run db:seed
+> ```
 
 ### 3.7 Jalankan Development Server
 
@@ -472,6 +493,12 @@ npm run build
 npx prisma migrate deploy
 npm run db:seed
 ```
+
+> **Alternatif jika `migrate deploy` gagal** (error CREATEDB atau URL kosong):
+> ```bash
+> npx prisma db push
+> npm run db:seed
+> ```
 
 ### 4.8 Buat systemd Service
 
