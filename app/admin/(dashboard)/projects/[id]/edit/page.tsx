@@ -29,6 +29,9 @@ export default async function EditProjectPage({ params }: EditProjectPageProps) 
         tech:        project.tech,
         gradient:    project.gradient,
         icon:        project.icon,
+        imageUrl:    project.imageUrl ?? "",
+        liveUrl:     project.liveUrl ?? "",
+        githubUrl:   project.githubUrl ?? "",
         order:       project.order,
         published:   project.published,
       }}

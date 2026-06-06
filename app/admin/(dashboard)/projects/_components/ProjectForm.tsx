@@ -14,6 +14,9 @@ export interface ProjectFormData {
   tech:        string[];
   gradient:    string;
   icon:        string;
+  imageUrl:    string;
+  liveUrl:     string;
+  githubUrl:   string;
   order:       number;
   published:   boolean;
 }
@@ -46,6 +49,9 @@ export default function ProjectForm({ mode, initial, projectId }: ProjectFormPro
   const [tech,        setTech]        = useState<string[]>(initial?.tech ?? []);
   const [gradient,    setGradient]    = useState(initial?.gradient ?? "from-indigo-500 to-purple-600");
   const [icon,        setIcon]        = useState(initial?.icon ?? "📁");
+  const [imageUrl,    setImageUrl]    = useState(initial?.imageUrl ?? "");
+  const [liveUrl,     setLiveUrl]     = useState(initial?.liveUrl ?? "");
+  const [githubUrl,   setGithubUrl]   = useState(initial?.githubUrl ?? "");
   const [order,       setOrder]       = useState(initial?.order ?? 0);
   const [published,   setPublished]   = useState(initial?.published ?? true);
 
@@ -81,7 +87,7 @@ export default function ProjectForm({ mode, initial, projectId }: ProjectFormPro
     setError("");
     setLoading(true);
 
-    const payload = { title, subtitle, description, domain, highlights, tech, gradient, icon, order, published };
+    const payload = { title, subtitle, description, domain, highlights, tech, gradient, icon, imageUrl, liveUrl, githubUrl, order, published };
     const url    = mode === "edit" ? `/api/admin/projects/${projectId}` : "/api/admin/projects";
     const method = mode === "edit" ? "PATCH" : "POST";
 
@@ -192,6 +198,40 @@ export default function ProjectForm({ mode, initial, projectId }: ProjectFormPro
             rows={4}
             className="w-full px-3 py-2.5 rounded-xl bg-slate-800/60 border border-slate-700/60 text-slate-200 placeholder-slate-600 text-sm resize-none focus:outline-none focus:border-indigo-500/60 focus:ring-1 focus:ring-indigo-500/20 transition-all"
           />
+        </div>
+
+        {/* Image URL + Live URL + GitHub URL */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-medium text-slate-400">Screenshot URL</label>
+            <input
+              type="url"
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+              placeholder="https://..."
+              className="w-full px-3 py-2.5 rounded-xl bg-slate-800/60 border border-slate-700/60 text-slate-200 placeholder-slate-600 text-sm focus:outline-none focus:border-indigo-500/60 focus:ring-1 focus:ring-indigo-500/20 transition-all"
+            />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-medium text-slate-400">Live Demo URL</label>
+            <input
+              type="url"
+              value={liveUrl}
+              onChange={(e) => setLiveUrl(e.target.value)}
+              placeholder="https://..."
+              className="w-full px-3 py-2.5 rounded-xl bg-slate-800/60 border border-slate-700/60 text-slate-200 placeholder-slate-600 text-sm focus:outline-none focus:border-indigo-500/60 focus:ring-1 focus:ring-indigo-500/20 transition-all"
+            />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-medium text-slate-400">GitHub URL</label>
+            <input
+              type="url"
+              value={githubUrl}
+              onChange={(e) => setGithubUrl(e.target.value)}
+              placeholder="https://github.com/..."
+              className="w-full px-3 py-2.5 rounded-xl bg-slate-800/60 border border-slate-700/60 text-slate-200 placeholder-slate-600 text-sm focus:outline-none focus:border-indigo-500/60 focus:ring-1 focus:ring-indigo-500/20 transition-all"
+            />
+          </div>
         </div>
 
         {/* Highlights (tag input) */}

@@ -17,6 +17,7 @@ import {
   Code2,
   PenSquare,
   Settings,
+  Briefcase,
 } from "lucide-react";
 import MobileNav from "./_components/MobileNav";
 
@@ -25,6 +26,7 @@ const SIDEBAR_LINKS = [
   { label: "Projects",   href: "/admin/projects",     icon: FolderKanban    },
   { label: "Blog Posts", href: "/admin/posts",         icon: FileText        },
   { label: "Tulis Post", href: "/admin/posts/new",     icon: PenSquare       },
+  { label: "Experience", href: "/admin/experience",     icon: Briefcase       },
   { label: "Settings",   href: "/admin/settings/about", icon: Settings       },
 ];
 

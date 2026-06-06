@@ -4,22 +4,32 @@ import { useState, useEffect } from "react";
 import { Save, Loader2 } from "lucide-react";
 
 interface SiteSettings {
+  heroName: string;
   heroHeadline: string;
   heroDescription: string;
   heroAvailability: string;
   heroResumeUrl: string;
   heroCtaPrimary: string;
   heroCtaSecondary: string;
+  aboutBio: string;
+  aboutImage: string;
+  aboutFocus: string;
+  aboutPersonalTouch: string;
 }
 
 export default function AboutSettingsPage() {
   const [settings, setSettings] = useState<SiteSettings>({
+    heroName: "",
     heroHeadline: "",
     heroDescription: "",
     heroAvailability: "",
     heroResumeUrl: "",
     heroCtaPrimary: "",
     heroCtaSecondary: "",
+    aboutBio: "",
+    aboutImage: "",
+    aboutFocus: "",
+    aboutPersonalTouch: "",
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -31,12 +41,17 @@ export default function AboutSettingsPage() {
       .then((r) => r.json())
       .then((data) => {
         setSettings({
-          heroHeadline:     data.heroHeadline ?? "",
-          heroDescription:  data.heroDescription ?? "",
-          heroAvailability: data.heroAvailability ?? "",
-          heroResumeUrl:    data.heroResumeUrl ?? "",
-          heroCtaPrimary:   data.heroCtaPrimary ?? "",
-          heroCtaSecondary: data.heroCtaSecondary ?? "",
+          heroName:           data.heroName ?? "",
+          heroHeadline:       data.heroHeadline ?? "",
+          heroDescription:    data.heroDescription ?? "",
+          heroAvailability:   data.heroAvailability ?? "",
+          heroResumeUrl:      data.heroResumeUrl ?? "",
+          heroCtaPrimary:     data.heroCtaPrimary ?? "",
+          heroCtaSecondary:   data.heroCtaSecondary ?? "",
+          aboutBio:           data.aboutBio ?? "",
+          aboutImage:         data.aboutImage ?? "",
+          aboutFocus:         data.aboutFocus ?? "",
+          aboutPersonalTouch: data.aboutPersonalTouch ?? "",
         });
         setLoading(false);
       })
@@ -100,12 +115,21 @@ export default function AboutSettingsPage() {
       )}
 
       <div className="flex flex-col gap-5">
+        <Field label="Nama" value={settings.heroName} onChange={(v) => update("heroName", v)} required placeholder="Vindy Pratama" />
         <Field label="Headline" value={settings.heroHeadline} onChange={(v) => update("heroHeadline", v)} required />
         <Field label="Description" value={settings.heroDescription} onChange={(v) => update("heroDescription", v)} textarea />
         <Field label="Availability Badge" value={settings.heroAvailability} onChange={(v) => update("heroAvailability", v)} />
         <Field label="Resume URL" value={settings.heroResumeUrl} onChange={(v) => update("heroResumeUrl", v)} placeholder="/resume.pdf" />
         <Field label="Primary CTA Text" value={settings.heroCtaPrimary} onChange={(v) => update("heroCtaPrimary", v)} />
         <Field label="Secondary CTA Text" value={settings.heroCtaSecondary} onChange={(v) => update("heroCtaSecondary", v)} />
+
+        <hr className="border-slate-800/60" />
+        <h3 className="text-sm font-semibold text-slate-300">About Me Section</h3>
+
+        <Field label="Bio / Latar Belakang" value={settings.aboutBio} onChange={(v) => update("aboutBio", v)} textarea placeholder="Ceritakan perjalananmu di dunia teknologi..." />
+        <Field label="Image URL" value={settings.aboutImage} onChange={(v) => update("aboutImage", v)} placeholder="https://..." />
+        <Field label="Focus Areas / Spesialisasi" value={settings.aboutFocus} onChange={(v) => update("aboutFocus", v)} textarea placeholder="UI/UX, Backend Systems, IoT, dll." />
+        <Field label="Beyond Code / Personal Touch" value={settings.aboutPersonalTouch} onChange={(v) => update("aboutPersonalTouch", v)} textarea placeholder="Hobi, minat di luar coding..." />
       </div>
 
       <button

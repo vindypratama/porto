@@ -7,6 +7,7 @@
 import { ArrowDown, Download, Briefcase } from "lucide-react";
 
 interface HeroProps {
+  heroName?: string;
   headline?: string;
   description?: string;
   availability?: string;
@@ -16,6 +17,7 @@ interface HeroProps {
 }
 
 export default function Hero({
+  heroName = "Vindy Pratama",
   headline = "Software Engineer & System Architect",
   description = "Over 10 years of experience building enterprise-grade applications, secure REST APIs, and Industrial IoT systems — from sensor to dashboard.",
   availability = "Available for freelance & full-time roles",
@@ -72,6 +74,9 @@ export default function Hero({
         </div>
 
         {/* Main headline */}
+        <p className="text-lg sm:text-xl font-medium text-indigo-400 mb-4">
+          {heroName}
+        </p>
         <h1
           className="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight text-white"
           dangerouslySetInnerHTML={{ __html: headline }}

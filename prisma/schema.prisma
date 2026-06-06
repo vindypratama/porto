@@ -48,6 +48,9 @@ model Project {
   tech        String[] // Array of tech names
   gradient    String   // Tailwind gradient class, e.g. "from-amber-500 to-orange-600"
   icon        String   // Emoji icon
+  imageUrl    String?  // Screenshot/project image URL
+  liveUrl     String?  // Live demo URL
+  githubUrl   String?  // Source code URL
   order       Int      @default(0) // Urutan tampil di halaman
   published   Boolean  @default(true)
   createdAt   DateTime @default(now())
@@ -57,22 +60,53 @@ model Project {
 /// SiteSettings: Singleton row for site-wide config (About, Contact, Logo)
 model SiteSettings {
   id                     String   @id @default(cuid())
+  // Hero
+  heroName               String   @default("Vindy Pratama")
   heroHeadline           String   @default("Software Engineer & System Architect")
   heroDescription        String   @default("Over 10 years of experience building enterprise-grade applications, secure REST APIs, and Industrial IoT systems — from sensor to dashboard.")
   heroAvailability       String   @default("Available for freelance & full-time roles")
   heroResumeUrl          String   @default("/resume.pdf")
   heroCtaPrimary         String   @default("View Projects")
   heroCtaSecondary       String   @default("Download Resume")
+  // About
+  aboutBio               String   @default("")
+  aboutImage             String?
+  aboutFocus             String   @default("")
+  aboutPersonalTouch     String   @default("")
+  // Contact
   contactHeading         String   @default("Let's Work Together")
   contactDescription     String   @default("Whether it's a greenfield enterprise system, a hardware integration challenge, or modernizing a legacy platform — I'm open to meaningful conversations.")
   contactEmail           String   @default("vindypratama8@gmail.com")
   contactLinkedIn        String   @default("https://www.linkedin.com/in/vindypratama")
+  contactGitHub          String   @default("https://github.com/vindypratama")
   additionalContactLinks Json     @default("[]")
+  // Logo
   logoIcon               String   @default("code-2")
   logoText               String   @default("<dev />")
   logoImageUrl           String?
+  // Section toggles
+  showHero               Boolean  @default(true)
+  showAbout              Boolean  @default(true)
+  showTechStack          Boolean  @default(true)
+  showProjects           Boolean  @default(true)
+  showExperience         Boolean  @default(true)
+  showContact            Boolean  @default(true)
   createdAt              DateTime @default(now())
   updatedAt              DateTime @updatedAt
+}
+
+/// Experience: Work history entries for the portfolio
+model Experience {
+  id          String   @id @default(cuid())
+  role        String
+  company     String
+  duration    String   // e.g. "2022 — Present", "2020 — 2022"
+  description String
+  impact      String   // Key achievement/impact with numbers
+  current     Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 /// TechStackGroup: Groups of skills (e.g. "Backend & APIs", "Infrastructure & DevOps")

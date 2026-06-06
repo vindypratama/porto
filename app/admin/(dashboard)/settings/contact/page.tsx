@@ -14,6 +14,7 @@ interface ContactSettings {
   contactDescription: string;
   contactEmail: string;
   contactLinkedIn: string;
+  contactGitHub: string;
   additionalContactLinks: ContactLink[];
 }
 
@@ -23,6 +24,7 @@ export default function ContactSettingsPage() {
     contactDescription: "",
     contactEmail: "",
     contactLinkedIn: "",
+    contactGitHub: "",
     additionalContactLinks: [],
   });
   const [loading, setLoading] = useState(true);
@@ -44,6 +46,7 @@ export default function ContactSettingsPage() {
           contactDescription:     data.contactDescription ?? "",
           contactEmail:           data.contactEmail ?? "",
           contactLinkedIn:        data.contactLinkedIn ?? "",
+          contactGitHub:          data.contactGitHub ?? "",
           additionalContactLinks: links,
         });
         setLoading(false);
@@ -133,6 +136,7 @@ export default function ContactSettingsPage() {
         <Field label="Description" value={settings.contactDescription} onChange={(v) => update("contactDescription", v)} textarea />
         <Field label="Email" value={settings.contactEmail} onChange={(v) => update("contactEmail", v)} type="email" required />
         <Field label="LinkedIn URL" value={settings.contactLinkedIn} onChange={(v) => update("contactLinkedIn", v)} type="url" />
+        <Field label="GitHub URL" value={settings.contactGitHub} onChange={(v) => update("contactGitHub", v)} type="url" placeholder="https://github.com/username" />
 
         <div className="flex flex-col gap-2">
           <label className="text-xs font-medium text-slate-500">Additional Links</label>
@@ -196,6 +200,7 @@ function Field({
   textarea,
   required,
   type = "text",
+  placeholder,
 }: {
   label: string;
   value: string;
@@ -203,6 +208,7 @@ function Field({
   textarea?: boolean;
   required?: boolean;
   type?: string;
+  placeholder?: string;
 }) {
   return (
     <div className="flex flex-col gap-1.5">
@@ -214,6 +220,7 @@ function Field({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           rows={3}
+          placeholder={placeholder}
           className="w-full px-3 py-2 rounded-xl bg-slate-800/60 border border-slate-700/60 text-slate-200 placeholder-slate-600 text-sm resize-none focus:outline-none focus:border-indigo-500/60 focus:ring-1 focus:ring-indigo-500/20 transition-all"
         />
       ) : (
@@ -221,6 +228,7 @@ function Field({
           type={type}
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
           className="w-full px-3 py-2 rounded-xl bg-slate-800/60 border border-slate-700/60 text-slate-200 placeholder-slate-600 text-sm focus:outline-none focus:border-indigo-500/60 focus:ring-1 focus:ring-indigo-500/20 transition-all"
         />
       )}
