@@ -2,16 +2,25 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, X, Code2, LogOut } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import {
+  Menu, X, Code2,
+  LayoutDashboard, FolderKanban, FileText, PenSquare, Settings,
+} from "lucide-react";
+
+const NAV_LINKS = [
+  { label: "Dashboard",   href: "/admin",                icon: LayoutDashboard },
+  { label: "Projects",    href: "/admin/projects",       icon: FolderKanban    },
+  { label: "Blog Posts",  href: "/admin/posts",          icon: FileText        },
+  { label: "Tulis Post",  href: "/admin/posts/new",      icon: PenSquare       },
+  { label: "Settings",    href: "/admin/settings/about",  icon: Settings        },
+];
 
 interface MobileNavProps {
-  links: { label: string; href: string; icon: LucideIcon }[];
   userName: string;
   userInitial: string;
 }
 
-export default function MobileNav({ links, userName, userInitial }: MobileNavProps) {
+export default function MobileNav({ userName, userInitial }: MobileNavProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -56,7 +65,7 @@ export default function MobileNav({ links, userName, userInitial }: MobileNavPro
 
         {/* Nav links */}
         <nav className="flex-1 py-4 px-3 flex flex-col gap-1">
-          {links.map(({ label, href, icon: Icon }) => (
+          {NAV_LINKS.map(({ label, href, icon: Icon }) => (
             <Link
               key={href}
               href={href}

@@ -40,7 +40,6 @@ export default async function AdminLayout({
     <div className="min-h-screen bg-[#0a0a0f] flex">
       {/* Mobile nav */}
       <MobileNav
-        links={SIDEBAR_LINKS}
         userName={session.user?.name ?? "Admin"}
         userInitial={session.user?.name?.[0]?.toUpperCase() ?? "A"}
       />
