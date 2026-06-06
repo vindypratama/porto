@@ -1,11 +1,28 @@
 /**
  * Hero — full-viewport landing section.
  * Animated headline, sub-headline, CTA buttons, and a subtle grid background.
+ * Now accepts dynamic props from SiteSettings.
  */
 
 import { ArrowDown, Download, Briefcase } from "lucide-react";
 
-export default function Hero() {
+interface HeroProps {
+  headline?: string;
+  description?: string;
+  availability?: string;
+  resumeUrl?: string;
+  ctaPrimary?: string;
+  ctaSecondary?: string;
+}
+
+export default function Hero({
+  headline = "Software Engineer & System Architect",
+  description = "Over 10 years of experience building enterprise-grade applications, secure REST APIs, and Industrial IoT systems — from sensor to dashboard.",
+  availability = "Available for freelance & full-time roles",
+  resumeUrl = "/resume.pdf",
+  ctaPrimary = "View Projects",
+  ctaSecondary = "Download Resume",
+}: HeroProps) {
   return (
     <section
       id="about"
@@ -50,25 +67,19 @@ export default function Hero() {
             <span className="relative inline-flex h-2 w-2 rounded-full bg-indigo-400" />
           </span>
           <span className="text-xs font-medium text-indigo-300 tracking-wide">
-            Available for freelance & full-time roles
+            {availability}
           </span>
         </div>
 
         {/* Main headline */}
-        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight text-white">
-          Software{" "}
-          <span className="text-gradient">Engineer</span>
-          <br />
-          &amp; System Architect
-        </h1>
+        <h1
+          className="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight text-white"
+          dangerouslySetInnerHTML={{ __html: headline }}
+        />
 
         {/* Sub-headline */}
         <p className="mt-6 max-w-2xl mx-auto text-lg sm:text-xl text-slate-400 leading-relaxed">
-          Over <span className="text-slate-200 font-medium">10 years of experience</span> building{" "}
-          <span className="text-slate-200 font-medium">enterprise-grade applications</span>,{" "}
-          <span className="text-slate-200 font-medium">secure REST APIs</span>, and{" "}
-          <span className="text-slate-200 font-medium">Industrial IoT systems</span>
-          — from sensor to dashboard.
+          {description}
         </p>
 
         {/* CTA buttons */}
@@ -84,10 +95,10 @@ export default function Hero() {
             "
           >
             <Briefcase size={16} />
-            View Projects
+            {ctaPrimary}
           </a>
           <a
-            href="/resume.pdf"
+            href={resumeUrl}
             download
             className="
               inline-flex items-center gap-2 px-7 py-3.5 rounded-xl
@@ -98,7 +109,7 @@ export default function Hero() {
             "
           >
             <Download size={16} />
-            Download Resume
+            {ctaSecondary}
           </a>
         </div>
 

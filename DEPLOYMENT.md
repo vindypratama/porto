@@ -485,6 +485,10 @@ cd /var/www/porto
 npm install
 npx prisma generate
 npm run build
+
+# Copy static files ke standalone (WAJIB untuk standalone mode)
+cp -r public .next/standalone/public
+cp -r .next/static .next/standalone/.next/static
 ```
 
 ### 4.7 Database Migration & Seed
@@ -516,10 +520,11 @@ After=network.target postgresql.service
 [Service]
 Type=simple
 User=root
-WorkingDirectory=/var/www/porto
+WorkingDirectory=/var/www/porto/.next/standalone
 ExecStart=/usr/bin/node /var/www/porto/.next/standalone/server.js
 Restart=on-failure
 RestartSec=10
+EnvironmentFile=/var/www/porto/.env
 Environment=NODE_ENV=production
 Environment=PORT=3000
 Environment=HOSTNAME=0.0.0.0
@@ -528,7 +533,10 @@ Environment=HOSTNAME=0.0.0.0
 WantedBy=multi-user.target
 ```
 
-> Catatan: Jika menggunakan standalone output, pastikan `next.config.mjs` memiliki `output: "standalone"`. File `.env` akan dibaca otomatis dari working directory.
+> **Penting:**
+> - `WorkingDirectory` harus mengarah ke `.next/standalone` (bukan root project)
+> - `EnvironmentFile` mengarah ke `.env` file karena standalone server tidak membaca `.env` secara otomatis
+> - Pastikan sudah menjalankan `cp -r public .next/standalone/public` dan `cp -r .next/static .next/standalone/.next/static` setelah build
 
 Start dan enable service:
 

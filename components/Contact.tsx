@@ -1,8 +1,24 @@
 /**
  * Contact — minimal contact / CTA section.
+ * Now accepts dynamic data from SiteSettings.
  */
 
 import { Mail, ArrowUpRight } from "lucide-react";
+import { resolveIcon } from "@/lib/icon-resolver";
+
+interface ContactLink {
+  label: string;
+  url: string;
+  icon: string;
+}
+
+interface ContactProps {
+  heading?: string;
+  description?: string;
+  email?: string;
+  linkedIn?: string;
+  additionalLinks?: ContactLink[];
+}
 
 function LinkedinIcon({ size = 18 }: { size?: number }) {
   return (
@@ -12,22 +28,40 @@ function LinkedinIcon({ size = 18 }: { size?: number }) {
   );
 }
 
-const SOCIALS = [
-  {
-    label: "Email",
-    href: "mailto:vindypratama8@gmail.com",
-    icon: <Mail size={18} />,
-    display: "vindypratama8@gmail.com",
-  },
-  {
-    label: "LinkedIn",
-    href: "https://www.linkedin.com/in/vindypratama",
-    icon: <LinkedinIcon size={18} />,
-    display: "linkedin.com/in/vindypratama",
-  },
-];
+export default function Contact({
+  heading = "Let's Work Together",
+  description = "Whether it's a greenfield enterprise system, a hardware integration challenge, or modernizing a legacy platform — I'm open to meaningful conversations.",
+  email = "vindypratama8@gmail.com",
+  linkedIn = "https://www.linkedin.com/in/vindypratama",
+  additionalLinks = [],
+}: ContactProps) {
+  const socials = [
+    {
+      label: "Email",
+      href: `mailto:${email}`,
+      icon: <Mail size={18} />,
+      display: email,
+    },
+    {
+      label: "LinkedIn",
+      href: linkedIn,
+      icon: <LinkedinIcon size={18} />,
+      display: linkedIn.replace(/^https?:\/\/(www\.)?/, ""),
+    },
+    ...additionalLinks.map((link) => {
+      const iconResult = resolveIcon(link.icon);
+      const IconComp = iconResult.type === "lucide" ? iconResult.component : null;
+      return {
+        label: link.label,
+        href: link.url,
+        icon: iconResult.type === "emoji"
+          ? <span>{iconResult.emoji}</span>
+          : IconComp ? <IconComp size={18} /> : null,
+        display: link.url.replace(/^https?:\/\/(www\.)?/, ""),
+      };
+    }),
+  ];
 
-export default function Contact() {
   return (
     <section id="contact" className="relative py-28 px-4">
       {/* Divider glow */}
@@ -42,17 +76,16 @@ export default function Contact() {
           Get In Touch
         </span>
         <h2 className="mt-3 text-4xl font-bold text-white">
-          Let&apos;s{" "}
-          <span className="text-gradient">Work Together</span>
+          {heading.split(" ").slice(0, -1).join(" ")}{" "}
+          <span className="text-gradient">{heading.split(" ").slice(-1)}</span>
         </h2>
         <p className="mt-5 text-slate-400 text-lg leading-relaxed max-w-xl mx-auto">
-          Whether it&apos;s a greenfield enterprise system, a hardware integration challenge,
-          or modernizing a legacy platform — I&apos;m open to meaningful conversations.
+          {description}
         </p>
 
         {/* Primary CTA */}
         <a
-          href="mailto:vindypratama8@gmail.com"
+          href={`mailto:${email}`}
           className="
             mt-8 inline-flex items-center gap-2 px-8 py-4 rounded-xl
             bg-indigo-600 hover:bg-indigo-500
@@ -68,7 +101,7 @@ export default function Contact() {
 
         {/* Social links */}
         <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
-          {SOCIALS.map(({ label, href, icon, display }) => (
+          {socials.map(({ label, href, icon, display }) => (
             <a
               key={label}
               href={href}

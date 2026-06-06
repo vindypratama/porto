@@ -33,7 +33,105 @@ async function main() {
   });
   console.log(`✅ User admin dibuat: ${admin.email}`);
 
-  // ── 2. Projects (dari data CV Vindy Pratama) ───────────────
+  // ── 2. SiteSettings (singleton) ───────────────────────────
+  const settings = await prisma.siteSettings.upsert({
+    where: { id: "singleton" },
+    update: {},
+    create: {
+      id:                 "singleton",
+      heroHeadline:       "Software Engineer & System Architect",
+      heroDescription:    "Over 10 years of experience building enterprise-grade applications, secure REST APIs, and Industrial IoT systems — from sensor to dashboard.",
+      heroAvailability:   "Available for freelance & full-time roles",
+      heroResumeUrl:      "/resume.pdf",
+      heroCtaPrimary:     "View Projects",
+      heroCtaSecondary:   "Download Resume",
+      contactHeading:     "Let's Work Together",
+      contactDescription: "Whether it's a greenfield enterprise system, a hardware integration challenge, or modernizing a legacy platform — I'm open to meaningful conversations.",
+      contactEmail:       "vindypratama8@gmail.com",
+      contactLinkedIn:    "https://www.linkedin.com/in/vindypratama",
+      logoIcon:           "code-2",
+      logoText:           "<dev />",
+    },
+  });
+  console.log(`✅ SiteSettings dibuat: ${settings.id}`);
+
+  // ── 3. Tech Stack Groups & Items ─────────────────────────
+  const techStackData = [
+    {
+      name: "Backend & APIs",
+      color: "indigo",
+      sortOrder: 1,
+      items: [
+        { name: "Golang", icon: "server", sortOrder: 1 },
+        { name: "Node.js", icon: "server", sortOrder: 2 },
+        { name: "PHP", icon: "server", sortOrder: 3 },
+        { name: "REST API", icon: "api", sortOrder: 4 },
+        { name: "JWT Auth", icon: "key", sortOrder: 5 },
+        { name: "RBAC", icon: "shield", sortOrder: 6 },
+        { name: "MVC", icon: "layers", sortOrder: 7 },
+        { name: "Clean Architecture", icon: "boxes", sortOrder: 8 },
+      ],
+    },
+    {
+      name: "Infrastructure & DevOps",
+      color: "cyan",
+      sortOrder: 2,
+      items: [
+        { name: "Linux", icon: "terminal", sortOrder: 1 },
+        { name: "Nginx", icon: "server", sortOrder: 2 },
+        { name: "Apache", icon: "server", sortOrder: 3 },
+        { name: "Docker", icon: "container", sortOrder: 4 },
+        { name: "Edge Computing", icon: "cpu", sortOrder: 5 },
+        { name: "Server Admin", icon: "settings", sortOrder: 6 },
+      ],
+    },
+    {
+      name: "Database Engineering",
+      color: "emerald",
+      sortOrder: 3,
+      items: [
+        { name: "MySQL", icon: "database", sortOrder: 1 },
+        { name: "PostgreSQL", icon: "database", sortOrder: 2 },
+        { name: "TimescaleDB", icon: "database", sortOrder: 3 },
+        { name: "Schema Design", icon: "layout", sortOrder: 4 },
+        { name: "Query Optimization", icon: "zap", sortOrder: 5 },
+        { name: "Redis", icon: "database", sortOrder: 6 },
+      ],
+    },
+    {
+      name: "IoT & Integration",
+      color: "amber",
+      sortOrder: 4,
+      items: [
+        { name: "Modbus TCP/RTU", icon: "radio", sortOrder: 1 },
+        { name: "PLC Integration", icon: "cpu", sortOrder: 2 },
+        { name: "WebSocket", icon: "radio", sortOrder: 3 },
+        { name: "Real-Time Streaming", icon: "activity", sortOrder: 4 },
+        { name: "Time-Series Data", icon: "clock", sortOrder: 5 },
+        { name: "High Concurrency", icon: "gauge", sortOrder: 6 },
+      ],
+    },
+  ];
+
+  for (const groupData of techStackData) {
+    const { items, ...groupFields } = groupData;
+    const existingGroup = await prisma.techStackGroup.findFirst({
+      where: { name: groupFields.name },
+    });
+    if (!existingGroup) {
+      const group = await prisma.techStackGroup.create({
+        data: groupFields,
+      });
+      await prisma.techStackItem.createMany({
+        data: items.map((item) => ({ ...item, groupId: group.id })),
+      });
+      console.log(`✅ TechStack group dibuat: ${groupFields.name}`);
+    } else {
+      console.log(`⏭️  TechStack group sudah ada: ${groupFields.name}`);
+    }
+  }
+
+  // ── 4. Projects (dari data CV Vindy Pratama) ───────────────
   const projects = [
     {
       domain: "B2B E-Commerce",
