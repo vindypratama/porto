@@ -15,13 +15,15 @@ import {
   LogOut,
   Code2,
   PenSquare,
+  Settings,
 } from "lucide-react";
 
 const SIDEBAR_LINKS = [
-  { label: "Dashboard", href: "/admin",          icon: LayoutDashboard },
-  { label: "Projects",  href: "/admin/projects", icon: FolderKanban    },
-  { label: "Blog Posts",href: "/admin/posts",    icon: FileText        },
-  { label: "Tulis Post",href: "/admin/posts/new",icon: PenSquare       },
+  { label: "Dashboard",  href: "/admin",              icon: LayoutDashboard },
+  { label: "Projects",   href: "/admin/projects",     icon: FolderKanban    },
+  { label: "Blog Posts", href: "/admin/posts",         icon: FileText        },
+  { label: "Tulis Post", href: "/admin/posts/new",     icon: PenSquare       },
+  { label: "Settings",   href: "/admin/settings/about", icon: Settings       },
 ];
 
 export default async function AdminLayout({

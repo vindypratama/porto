@@ -5,7 +5,7 @@
 
 import { getBlogStats } from "@/modules/blog";
 import { getProjectStats } from "@/modules/projects";
-import { FileText, FolderKanban, Edit3, CheckCircle2 } from "lucide-react";
+import { FileText, FolderKanban, Edit3, CheckCircle2, Settings } from "lucide-react";
 import Link from "next/link";
 
 async function getStats() {
@@ -26,9 +26,10 @@ async function getStats() {
 }
 
 const QUICK_LINKS = [
-  { label: "Tulis Artikel Baru", href: "/admin/posts/new", icon: Edit3,        color: "from-indigo-500 to-purple-600"   },
-  { label: "Kelola Blog Posts",  href: "/admin/posts",     icon: FileText,     color: "from-cyan-500 to-blue-600"       },
-  { label: "Kelola Projects",    href: "/admin/projects",  icon: FolderKanban, color: "from-emerald-500 to-teal-600"    },
+  { label: "Tulis Artikel Baru", href: "/admin/posts/new",          icon: Edit3,        color: "from-indigo-500 to-purple-600"   },
+  { label: "Kelola Blog Posts",  href: "/admin/posts",              icon: FileText,     color: "from-cyan-500 to-blue-600"       },
+  { label: "Kelola Projects",    href: "/admin/projects",           icon: FolderKanban, color: "from-emerald-500 to-teal-600"    },
+  { label: "Site Settings",      href: "/admin/settings/about",     icon: Settings,     color: "from-amber-500 to-orange-600"    },
 ];
 
 export default async function AdminDashboard() {

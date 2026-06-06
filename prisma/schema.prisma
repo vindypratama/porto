@@ -54,6 +54,50 @@ model Project {
   updatedAt   DateTime @updatedAt
 }
 
+/// SiteSettings: Singleton row for site-wide config (About, Contact, Logo)
+model SiteSettings {
+  id                     String   @id @default(cuid())
+  heroHeadline           String   @default("Software Engineer & System Architect")
+  heroDescription        String   @default("Over 10 years of experience building enterprise-grade applications, secure REST APIs, and Industrial IoT systems — from sensor to dashboard.")
+  heroAvailability       String   @default("Available for freelance & full-time roles")
+  heroResumeUrl          String   @default("/resume.pdf")
+  heroCtaPrimary         String   @default("View Projects")
+  heroCtaSecondary       String   @default("Download Resume")
+  contactHeading         String   @default("Let's Work Together")
+  contactDescription     String   @default("Whether it's a greenfield enterprise system, a hardware integration challenge, or modernizing a legacy platform — I'm open to meaningful conversations.")
+  contactEmail           String   @default("vindypratama8@gmail.com")
+  contactLinkedIn        String   @default("https://www.linkedin.com/in/vindypratama")
+  additionalContactLinks Json     @default("[]")
+  logoIcon               String   @default("code-2")
+  logoText               String   @default("<dev />")
+  logoImageUrl           String?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+}
+
+/// TechStackGroup: Groups of skills (e.g. "Backend & APIs", "Infrastructure & DevOps")
+model TechStackGroup {
+  id        String           @id @default(cuid())
+  name      String
+  color     String           @default("indigo")
+  sortOrder Int              @default(0)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  items     TechStackItem[]
+}
+
+/// TechStackItem: Individual skills within a group
+model TechStackItem {
+  id        String        @id @default(cuid())
+  name      String
+  icon      String?
+  sortOrder Int           @default(0)
+  groupId   String
+  group     TechStackGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
 /// Post: Artikel Blog (konten disimpan dalam format Markdown)
 model Post {
   id          String     @id @default(cuid())

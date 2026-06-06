@@ -1,6 +1,6 @@
 /**
  * Navigation — sticky top bar with logo, nav links, and a CTA.
- * Becomes opaque on scroll via a CSS backdrop-blur.
+ * Now uses dynamic logo settings from database.
  */
 
 "use client";
@@ -8,6 +8,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X, Code2 } from "lucide-react";
 import Link from "next/link";
+import { getIconComponent } from "@/lib/icon-resolver";
 
 const NAV_LINKS = [
   { label: "About",      href: "#about",    external: false },
@@ -17,7 +18,17 @@ const NAV_LINKS = [
   { label: "Contact",    href: "#contact",  external: false },
 ];
 
-export default function Navigation() {
+interface NavigationProps {
+  logoIcon?: string;
+  logoText?: string;
+  logoImageUrl?: string | null;
+}
+
+export default function Navigation({
+  logoIcon = "code-2",
+  logoText = "<dev />",
+  logoImageUrl = null,
+}: NavigationProps) {
   const [isOpen, setIsOpen]       = useState(false);
   const [scrolled, setScrolled]   = useState(false);
 
@@ -31,6 +42,8 @@ export default function Navigation() {
     setIsOpen(false);
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
   };
+
+  const LogoIcon = getIconComponent(logoIcon);
 
   return (
     <header
@@ -49,8 +62,14 @@ export default function Navigation() {
             className="flex items-center gap-2 text-white font-bold text-lg hover:text-indigo-400 transition-colors"
             aria-label="Home"
           >
-            <Code2 size={22} className="text-indigo-400" />
-            <span className="font-mono tracking-tight">&lt;dev /&gt;</span>
+            {logoImageUrl ? (
+              <img src={logoImageUrl} alt="Logo" className="h-6 w-auto" />
+            ) : (
+              <>
+                <LogoIcon size={22} className="text-indigo-400" />
+                <span className="font-mono tracking-tight">{logoText}</span>
+              </>
+            )}
           </a>
 
           {/* Desktop links */}
