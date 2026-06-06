@@ -145,7 +145,7 @@ export default function ContactSettingsPage() {
               </button>
             </div>
           ))}
-          <div className="flex gap-2 items-end">
+          <div className="flex flex-col sm:flex-row gap-2 items-end">
             <input
               type="text"
               value={newLink.label}
@@ -165,7 +165,7 @@ export default function ContactSettingsPage() {
               value={newLink.icon}
               onChange={(e) => setNewLink((p) => ({ ...p, icon: e.target.value }))}
               placeholder="Icon"
-              className="w-20 px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700/60 text-slate-200 placeholder-slate-600 text-xs focus:outline-none focus:border-indigo-500/60 transition-all"
+              className="w-full sm:w-20 px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700/60 text-slate-200 placeholder-slate-600 text-xs focus:outline-none focus:border-indigo-500/60 transition-all"
             />
             <button
               onClick={addLink}

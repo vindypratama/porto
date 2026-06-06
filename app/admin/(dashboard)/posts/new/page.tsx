@@ -28,6 +28,7 @@ export default function NewPostPage() {
   const [tagInput,   setTagInput]   = useState("");
   const [tags,       setTags]       = useState<string[]>([]);
   const [preview,    setPreview]    = useState(false);
+  const [mobileTab,  setMobileTab]  = useState<"metadata" | "editor" | "preview">("editor");
   const [loading,    setLoading]    = useState<SaveStatus | null>(null);
   const [error,      setError]      = useState("");
 
@@ -85,18 +86,34 @@ export default function NewPostPage() {
   return (
     <div className="flex flex-col h-screen">
       {/* Toolbar */}
-      <header className="flex items-center justify-between px-6 h-16 border-b border-slate-800/60 bg-slate-900/40 backdrop-blur-sm shrink-0">
+      <header className="flex items-center justify-between px-4 md:px-6 h-16 border-b border-slate-800/60 bg-slate-900/40 backdrop-blur-sm shrink-0">
         <div className="flex items-center gap-3">
           <Link href="/admin/posts" className="text-slate-400 hover:text-white transition-colors">
             <ArrowLeft size={18} />
           </Link>
-          <span className="text-sm font-semibold text-slate-300">Artikel Baru</span>
+          <span className="text-sm font-semibold text-slate-300 hidden sm:inline">Artikel Baru</span>
         </div>
         <div className="flex items-center gap-2">
-          {/* Toggle preview */}
+          {/* Mobile tab toggle */}
+          <div className="flex md:hidden rounded-lg border border-slate-700/60 overflow-hidden">
+            {(["metadata", "editor", "preview"] as const).map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setMobileTab(tab)}
+                className={`px-3 py-1.5 text-xs font-medium transition-all ${
+                  mobileTab === tab
+                    ? "bg-indigo-600 text-white"
+                    : "text-slate-400 hover:text-white"
+                }`}
+              >
+                {tab === "metadata" ? "Info" : tab === "editor" ? "Editor" : "Preview"}
+              </button>
+            ))}
+          </div>
+          {/* Desktop preview toggle */}
           <button
             onClick={() => setPreview((v) => !v)}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all"
+            className="hidden md:flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all"
           >
             {preview ? <EyeOff size={14} /> : <Eye size={14} />}
             {preview ? "Editor" : "Preview"}
@@ -105,19 +122,19 @@ export default function NewPostPage() {
           <button
             onClick={() => handleSave("DRAFT")}
             disabled={!!loading}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 bg-slate-800 hover:bg-slate-700 border border-slate-700/60 transition-all disabled:opacity-50"
+            className="flex items-center gap-2 px-3 md:px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 bg-slate-800 hover:bg-slate-700 border border-slate-700/60 transition-all disabled:opacity-50"
           >
             {loading === "DRAFT" ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />}
-            Simpan Draft
+            <span className="hidden sm:inline">Simpan Draft</span>
           </button>
           {/* Publish */}
           <button
             onClick={() => handleSave("PUBLISHED")}
             disabled={!!loading}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-all disabled:opacity-50"
+            className="flex items-center gap-2 px-3 md:px-4 py-2 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-all disabled:opacity-50"
           >
             {loading === "PUBLISHED" ? <Loader2 size={13} className="animate-spin" /> : <FileText size={13} />}
-            Publish
+            <span className="hidden sm:inline">Publish</span>
           </button>
         </div>
       </header>
@@ -132,8 +149,8 @@ export default function NewPostPage() {
       {/* Body */}
       <div className="flex flex-1 min-h-0">
 
-        {/* Metadata sidebar */}
-        <aside className="w-64 shrink-0 border-r border-slate-800/60 overflow-y-auto p-4 flex flex-col gap-4">
+        {/* Metadata sidebar — mobile: show when tab=metadata, desktop: always visible */}
+        <aside className={`${mobileTab === "metadata" ? "flex" : "hidden"} md:flex w-full md:w-64 shrink-0 border-r border-slate-800/60 overflow-y-auto p-4 flex-col gap-4`}>
           {/* Title */}
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-medium text-slate-500">Judul *</label>
@@ -215,9 +232,9 @@ export default function NewPostPage() {
           </div>
         </aside>
 
-        {/* Editor / Preview */}
-        <div className="flex-1 min-w-0 flex">
-          {!preview ? (
+        {/* Editor / Preview — mobile: show based on tab, desktop: based on preview toggle */}
+        <div className={`${mobileTab === "editor" || mobileTab === "preview" ? "flex" : "hidden"} md:flex flex-1 min-w-0`}>
+          {!preview && mobileTab !== "preview" ? (
             /* Markdown editor */
             <textarea
               value={content}
