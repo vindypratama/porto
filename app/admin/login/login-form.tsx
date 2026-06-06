@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Code2, Lock, Mail, Eye, EyeOff, Loader2 } from "lucide-react";
 
 export function LoginForm() {
-  const router       = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl  = searchParams.get("callbackUrl") ?? "/admin";
 
@@ -32,8 +31,7 @@ export function LoginForm() {
     if (result?.error) {
       setError("Email atau password salah.");
     } else {
-      router.push(callbackUrl);
-      router.refresh();
+      window.location.href = callbackUrl;
     }
   }
 
