@@ -2,13 +2,13 @@
  * app/admin/experience/page.tsx — Daftar experience entries.
  */
 
-import { getAllExperience } from "@/modules/experience";
+import { getAllExperience, type ExperienceEntry } from "@/modules/experience";
 import Link from "next/link";
 import { Plus, Briefcase } from "lucide-react";
 import ExperienceActions from "./_components/ExperienceActions";
 
 export default async function AdminExperiencePage() {
-  const entries = await getAllExperience();
+  const entries: ExperienceEntry[] = await getAllExperience() as ExperienceEntry[];
 
   return (
     <div className="p-4 md:p-6 lg:p-8">
