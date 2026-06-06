@@ -14,7 +14,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
 
 const connectionString = process.env.DATABASE_URL ?? "";
-const adapter = new PrismaPg({ connectionString });
+const adapter = new PrismaPg(connectionString);
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
@@ -39,16 +39,21 @@ async function main() {
     update: {},
     create: {
       id:                 "singleton",
+      heroName:           "Vindy Pratama",
       heroHeadline:       "Software Engineer & System Architect",
       heroDescription:    "Over 10 years of experience building enterprise-grade applications, secure REST APIs, and Industrial IoT systems — from sensor to dashboard.",
       heroAvailability:   "Available for freelance & full-time roles",
       heroResumeUrl:      "/resume.pdf",
       heroCtaPrimary:     "View Projects",
       heroCtaSecondary:   "Download Resume",
+      aboutBio:           "A passionate Software Engineer and System Architect with over 10 years of experience building enterprise-grade applications, from large-scale B2B e-commerce platforms to Industrial IoT systems.",
+      aboutFocus:         "Enterprise-scale applications, B2B e-commerce systems, Industrial IoT (IIoT) integrations, secure REST APIs, and high-concurrency real-time systems.",
+      aboutPersonalTouch: "When not coding, I enjoy exploring new technologies, contributing to open-source projects, and sharing knowledge through technical writing.",
       contactHeading:     "Let's Work Together",
       contactDescription: "Whether it's a greenfield enterprise system, a hardware integration challenge, or modernizing a legacy platform — I'm open to meaningful conversations.",
       contactEmail:       "vindypratama8@gmail.com",
       contactLinkedIn:    "https://www.linkedin.com/in/vindypratama",
+      contactGitHub:      "https://github.com/vindypratama",
       logoIcon:           "code-2",
       logoText:           "<dev />",
     },
