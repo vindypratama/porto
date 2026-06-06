@@ -60,6 +60,8 @@ services:
       NEXTAUTH_URL:  ${NEXTAUTH_URL:-https://yourdomain.com}
     ports:
       - "3000:3000"                  # Nginx di host akan proxy ke port ini
+    volumes:
+      - uploads_data:/app/public/uploads  # Persist uploaded files (logo, dll)
     depends_on:
       postgres:
         condition: service_healthy
@@ -72,6 +74,8 @@ services:
 volumes:
   postgres_data:
     name: porto_postgres_data        # Data DB persisten (aman saat container restart)
+  uploads_data:
+    name: porto_uploads_data         # Uploaded files persisten (logo, dll)
 
 networks:
   porto_network:

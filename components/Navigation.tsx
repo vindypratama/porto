@@ -6,7 +6,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Menu, X, Code2 } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { getIconComponent } from "@/lib/icon-resolver";
 
@@ -31,6 +31,7 @@ export default function Navigation({
 }: NavigationProps) {
   const [isOpen, setIsOpen]       = useState(false);
   const [scrolled, setScrolled]   = useState(false);
+  const [imgError, setImgError]   = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -62,8 +63,8 @@ export default function Navigation({
             className="flex items-center gap-2 text-white font-bold text-lg hover:text-indigo-400 transition-colors"
             aria-label="Home"
           >
-            {logoImageUrl ? (
-              <img src={logoImageUrl} alt="Logo" className="h-6 w-auto" />
+            {logoImageUrl && !imgError ? (
+              <img src={logoImageUrl} alt="Logo" className="h-6 w-auto" onError={() => setImgError(true)} />
             ) : (
               <>
                 <LogoIcon size={22} className="text-indigo-400" />
