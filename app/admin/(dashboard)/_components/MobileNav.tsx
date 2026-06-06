@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import {
   Menu, X, Code2,
-  LayoutDashboard, FolderKanban, FileText, PenSquare, Settings,
+  LayoutDashboard, FolderKanban, FileText, PenSquare, Settings, Briefcase,
 } from "lucide-react";
 
 const NAV_LINKS = [
@@ -12,6 +12,7 @@ const NAV_LINKS = [
   { label: "Projects",    href: "/admin/projects",       icon: FolderKanban    },
   { label: "Blog Posts",  href: "/admin/posts",          icon: FileText        },
   { label: "Tulis Post",  href: "/admin/posts/new",      icon: PenSquare       },
+  { label: "Experience",  href: "/admin/experience",      icon: Briefcase       },
   { label: "Settings",    href: "/admin/settings/about",  icon: Settings        },
 ];
 

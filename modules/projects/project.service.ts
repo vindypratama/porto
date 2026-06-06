@@ -84,6 +84,9 @@ export async function getPublishedProjects(): Promise<Project[]> {
       tech:        p.tech,
       gradient:    p.gradient,
       icon:        p.icon,
+      imageUrl:    p.imageUrl ?? undefined,
+      liveUrl:     p.liveUrl ?? undefined,
+      githubUrl:   p.githubUrl ?? undefined,
     }));
   } catch {
     console.warn("[Project Service] Database tidak tersedia, menggunakan data fallback.");

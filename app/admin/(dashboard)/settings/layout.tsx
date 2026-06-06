@@ -1,11 +1,12 @@
 import Link from "next/link";
-import { User, Layers, Mail, Image } from "lucide-react";
+import { User, Layers, Mail, Image, SlidersHorizontal } from "lucide-react";
 
 const SETTINGS_TABS = [
   { label: "About",      href: "/admin/settings/about",      icon: User   },
   { label: "Tech Stack", href: "/admin/settings/tech-stack",  icon: Layers },
   { label: "Contact",    href: "/admin/settings/contact",     icon: Mail   },
   { label: "Logo",       href: "/admin/settings/logo",        icon: Image  },
+  { label: "Sections",   href: "/admin/settings/sections",    icon: SlidersHorizontal },
 ];
 
 export default function SettingsLayout({

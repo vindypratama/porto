@@ -5,6 +5,7 @@
 
 import TechStackBadge from "@/components/TechStackBadge";
 import { ExternalLink, ChevronRight } from "lucide-react";
+import Image from "next/image";
 
 function GithubIcon({ size = 15 }: { size?: number }) {
   return (
@@ -24,6 +25,8 @@ export interface Project {
   /** Optional links */
   liveUrl?: string;
   githubUrl?: string;
+  /** Optional screenshot */
+  imageUrl?: string;
   /** Visual accent color class for the top border: e.g. "from-indigo-500 to-cyan-500" */
   gradient: string;
   /** Icon component or emoji for the domain */
@@ -49,6 +52,19 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
       <div
         className={`h-0.5 w-full bg-gradient-to-r ${project.gradient}`}
       />
+
+      {/* Screenshot */}
+      {project.imageUrl && (
+        <div className="relative w-full h-48 overflow-hidden">
+          <Image
+            src={project.imageUrl}
+            alt={project.title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 1024px) 100vw, 50vw"
+          />
+        </div>
+      )}
 
       <div className="flex flex-col gap-4 p-6 flex-1">
         {/* Domain badge + links */}
