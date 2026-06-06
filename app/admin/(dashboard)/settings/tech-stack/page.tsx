@@ -140,7 +140,7 @@ export default function TechStackSettingsPage() {
       {/* Create new group */}
       <div className="mb-6 p-4 rounded-xl border border-slate-800/60 bg-slate-900/40">
         <h3 className="text-sm font-semibold text-slate-300 mb-3">Tambah Group Baru</h3>
-        <div className="flex gap-3 items-end">
+        <div className="flex flex-col sm:flex-row gap-3 items-end">
           <div className="flex-1 flex flex-col gap-1.5">
             <label className="text-xs text-slate-500">Nama Group</label>
             <input
@@ -216,7 +216,7 @@ function GroupCard({
   return (
     <div className="rounded-xl border border-slate-800/60 bg-slate-900/40 overflow-hidden">
       {/* Group header */}
-      <div className="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-slate-800/20 transition-colors" onClick={onToggle}>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-4 py-3 cursor-pointer hover:bg-slate-800/20 transition-colors" onClick={onToggle}>
         <div className="flex items-center gap-3">
           {expanded ? <ChevronDown size={16} className="text-slate-500" /> : <ChevronRight size={16} className="text-slate-500" />}
           {editingName ? (
@@ -292,7 +292,7 @@ function GroupCard({
           </div>
 
           {/* Add item form */}
-          <div className="flex gap-2 items-end">
+          <div className="flex flex-col sm:flex-row gap-2 items-end">
             <div className="flex-1 flex flex-col gap-1">
               <input
                 type="text"

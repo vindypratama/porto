@@ -101,6 +101,14 @@ export async function getAllProjects() {
   }
 }
 
+export async function getProjectById(id: string) {
+  return projectRepo.findUniqueProject(id);
+}
+
+export async function createProject(data: Record<string, unknown>) {
+  return projectRepo.createProject(data);
+}
+
 export async function updateProject(
   id: string,
   data: Record<string, unknown>,

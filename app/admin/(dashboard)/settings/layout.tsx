@@ -14,14 +14,14 @@ export default function SettingsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="p-8">
+    <div className="p-4 md:p-6 lg:p-8">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-white">Site Settings</h1>
         <p className="mt-1 text-sm text-slate-500">Kelola konten portfolio kamu dari sini.</p>
       </div>
 
       {/* Tab navigation */}
-      <nav className="flex gap-1 mb-8 border-b border-slate-800/60 pb-px">
+      <nav className="flex gap-1 mb-8 border-b border-slate-800/60 pb-px overflow-x-auto">
         {SETTINGS_TABS.map(({ label, href, icon: Icon }) => (
           <Link
             key={href}

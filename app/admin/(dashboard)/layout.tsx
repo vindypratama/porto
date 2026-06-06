@@ -1,8 +1,9 @@
 /**
- * app/admin/layout.tsx — Layout untuk seluruh halaman /admin/*.
+ * app/admin/(dashboard)/layout.tsx — Layout untuk halaman /admin/* (kecuali login).
  *
  * Berisi sidebar navigasi + header dengan info user & tombol logout.
  * Session dicek di sini; jika tidak ada redirect ke login.
+ * Login page berada di luar layout ini (route group terpisah).
  */
 
 import { auth, signOut } from "@/auth";
@@ -17,6 +18,7 @@ import {
   PenSquare,
   Settings,
 } from "lucide-react";
+import MobileNav from "./_components/MobileNav";
 
 const SIDEBAR_LINKS = [
   { label: "Dashboard",  href: "/admin",              icon: LayoutDashboard },
@@ -36,9 +38,15 @@ export default async function AdminLayout({
 
   return (
     <div className="min-h-screen bg-[#0a0a0f] flex">
+      {/* Mobile nav */}
+      <MobileNav
+        links={SIDEBAR_LINKS}
+        userName={session.user?.name ?? "Admin"}
+        userInitial={session.user?.name?.[0]?.toUpperCase() ?? "A"}
+      />
 
-      {/* ── Sidebar ───────────────────────────────────────── */}
-      <aside className="w-56 shrink-0 flex flex-col border-r border-slate-800/60 bg-slate-900/40 backdrop-blur-sm sticky top-0 h-screen">
+      {/* ── Sidebar (desktop only) ─────────────────────────── */}
+      <aside className="hidden md:flex md:flex-col w-56 shrink-0 border-r border-slate-800/60 bg-slate-900/40 backdrop-blur-sm sticky top-0 h-screen">
         {/* Logo */}
         <div className="flex items-center gap-2.5 px-5 h-16 border-b border-slate-800/60">
           <Code2 size={20} className="text-indigo-400" />

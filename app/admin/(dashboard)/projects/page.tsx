@@ -16,9 +16,9 @@ export default async function AdminProjectsPage() {
   const projects = await getProjects();
 
   return (
-    <div className="p-8">
+    <div className="p-4 md:p-6 lg:p-8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-2xl font-bold text-white">Projects</h1>
           <p className="mt-1 text-sm text-slate-500">{projects.length} project ditemukan</p>
@@ -33,7 +33,7 @@ export default async function AdminProjectsPage() {
       </div>
 
       {/* Table */}
-      <div className="rounded-2xl border border-slate-800/60 overflow-hidden">
+      <div className="rounded-2xl border border-slate-800/60 overflow-x-auto">
         {projects.length === 0 ? (
           <div className="text-center py-16 text-slate-500">
             <p className="text-4xl mb-3">🏭</p>
@@ -44,8 +44,8 @@ export default async function AdminProjectsPage() {
             <thead>
               <tr className="border-b border-slate-800/60 bg-slate-900/60">
                 <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Project</th>
-                <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Domain</th>
-                <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Tech</th>
+                <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider hidden md:table-cell">Domain</th>
+                <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider hidden lg:table-cell">Tech</th>
                 <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
                 <th className="text-right px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Aksi</th>
               </tr>
@@ -62,12 +62,12 @@ export default async function AdminProjectsPage() {
                       </div>
                     </div>
                   </td>
-                  <td className="px-5 py-4">
+                  <td className="px-5 py-4 hidden md:table-cell">
                     <span className="text-xs font-semibold text-indigo-400 uppercase tracking-wide">
                       {project.domain}
                     </span>
                   </td>
-                  <td className="px-5 py-4">
+                  <td className="px-5 py-4 hidden lg:table-cell">
                     <div className="flex gap-1 flex-wrap">
                       {project.tech.slice(0, 3).map((t) => (
                         <span key={t} className="text-xs text-slate-400 bg-slate-800 border border-slate-700/60 px-2 py-0.5 rounded-full">

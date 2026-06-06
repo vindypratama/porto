@@ -1,6 +1,8 @@
 export {
   getPublishedProjects,
   getAllProjects,
+  getProjectById,
+  createProject,
   updateProject,
   deleteProject,
   getProjectStats,

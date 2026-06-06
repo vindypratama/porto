@@ -22,9 +22,9 @@ export default async function AdminPostsPage() {
   const posts = await getPosts();
 
   return (
-    <div className="p-8">
+    <div className="p-4 md:p-6 lg:p-8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-2xl font-bold text-white">Blog Posts</h1>
           <p className="mt-1 text-sm text-slate-500">{posts.length} artikel ditemukan</p>
@@ -39,7 +39,7 @@ export default async function AdminPostsPage() {
       </div>
 
       {/* Table */}
-      <div className="rounded-2xl border border-slate-800/60 overflow-hidden">
+      <div className="rounded-2xl border border-slate-800/60 overflow-x-auto">
         {posts.length === 0 ? (
           <div className="text-center py-16 text-slate-500">
             <p className="text-4xl mb-3">📝</p>
@@ -51,8 +51,8 @@ export default async function AdminPostsPage() {
               <tr className="border-b border-slate-800/60 bg-slate-900/60">
                 <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Judul</th>
                 <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
-                <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Tags</th>
-                <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Tanggal</th>
+                <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider hidden md:table-cell">Tags</th>
+                <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider hidden md:table-cell">Tanggal</th>
                 <th className="text-right px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Aksi</th>
               </tr>
             </thead>
@@ -75,7 +75,7 @@ export default async function AdminPostsPage() {
                       {post.status === "PUBLISHED" ? "Published" : "Draft"}
                     </span>
                   </td>
-                  <td className="px-5 py-4">
+                  <td className="px-5 py-4 hidden md:table-cell">
                     <div className="flex gap-1 flex-wrap">
                       {post.tags.slice(0, 2).map((tag) => (
                         <span key={tag} className="text-xs text-indigo-300 bg-indigo-950/40 border border-indigo-500/20 px-2 py-0.5 rounded-full">
@@ -87,7 +87,7 @@ export default async function AdminPostsPage() {
                       )}
                     </div>
                   </td>
-                  <td className="px-5 py-4 text-slate-500 text-xs whitespace-nowrap">
+                  <td className="px-5 py-4 text-slate-500 text-xs whitespace-nowrap hidden md:table-cell">
                     {formatDate(post.createdAt)}
                   </td>
                   <td className="px-5 py-4">
