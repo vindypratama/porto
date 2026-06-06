@@ -12,11 +12,12 @@ import { Calendar, Clock, Tag, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 interface PageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const post = await getPostBySlug(params.slug);
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
   if (!post) return { title: "Artikel tidak ditemukan" };
 
   return {
@@ -46,7 +47,8 @@ function readingTime(content: string): string {
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
-  const post = await getPostBySlug(params.slug);
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
 
   if (!post || post.status !== "PUBLISHED") notFound();
 
