@@ -23,7 +23,9 @@ async function main() {
   // ── 1. Admin User ─────────────────────────────────────────────
   const admin = await prisma.user.upsert({
     where: { email: "admin@portfolio.dev" },
-    update: {},
+    update: {
+      password: await bcrypt.hash("ganti-password-ini", 12),
+    },
     create: {
       email:    "admin@portfolio.dev",
       name:     "Vindy",

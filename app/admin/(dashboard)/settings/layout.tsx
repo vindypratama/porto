@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { User, Layers, Mail, Image, SlidersHorizontal } from "lucide-react";
+import { User, Layers, Mail, Image, SlidersHorizontal, KeyRound } from "lucide-react";
 
 const SETTINGS_TABS = [
   { label: "About",      href: "/admin/settings/about",      icon: User   },
@@ -7,6 +7,7 @@ const SETTINGS_TABS = [
   { label: "Contact",    href: "/admin/settings/contact",     icon: Mail   },
   { label: "Logo",       href: "/admin/settings/logo",        icon: Image  },
   { label: "Sections",   href: "/admin/settings/sections",    icon: SlidersHorizontal },
+  { label: "Account",    href: "/admin/settings/account",     icon: KeyRound },
 ];
 
 export default function SettingsLayout({
@@ -17,8 +18,8 @@ export default function SettingsLayout({
   return (
     <div className="p-4 md:p-6 lg:p-8">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white">Site Settings</h1>
-        <p className="mt-1 text-sm text-slate-500">Kelola konten portfolio kamu dari sini.</p>
+        <h1 className="text-2xl font-bold text-white">Settings</h1>
+        <p className="mt-1 text-sm text-slate-500">Kelola konten portfolio dan akun kamu dari sini.</p>
       </div>
 
       {/* Tab navigation */}
