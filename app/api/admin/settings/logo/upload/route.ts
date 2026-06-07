@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/modules/auth";
 import { updateSettings } from "@/modules/settings";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
 
 const ALLOWED_TYPES = ["image/png", "image/svg+xml", "image/jpeg", "image/webp"];
 const MAX_SIZE = 2 * 1024 * 1024; // 2MB
@@ -34,19 +32,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const ext = file.name.split(".").pop() ?? "png";
-    const fileName = `logo-${Date.now()}.${ext}`;
-    const uploadDir = path.join(process.cwd(), "public", "uploads");
-
-    await mkdir(uploadDir, { recursive: true });
-
     const buffer = Buffer.from(await file.arrayBuffer());
-    await writeFile(path.join(uploadDir, fileName), buffer);
+    const base64 = buffer.toString("base64");
+    const dataUrl = `data:${file.type};base64,${base64}`;
 
-    const imageUrl = `/uploads/${fileName}`;
-    await updateSettings({ logoImageUrl: imageUrl });
+    await updateSettings({ logoImageUrl: dataUrl });
 
-    return NextResponse.json({ url: imageUrl }, { status: 201 });
+    return NextResponse.json({ url: dataUrl }, { status: 201 });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Gagal mengupload file.";
     return NextResponse.json({ error: message }, { status: 500 });
