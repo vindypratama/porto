@@ -34,6 +34,10 @@ export default function Navigation({
   const [imgError, setImgError]   = useState(false);
 
   useEffect(() => {
+    setImgError(false);
+  }, [logoImageUrl]);
+
+  useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);

@@ -36,7 +36,18 @@ const DEFAULT_SETTINGS = {
 export async function getSettingsWithFallback() {
   try {
     const settings = await settingsRepo.getSiteSettings();
-    return settings ?? DEFAULT_SETTINGS;
+    if (!settings) return DEFAULT_SETTINGS;
+
+    // logoImageUrl: hanya terima data URL (base64) atau URL eksternal.
+    // Path lokal lama (e.g. /uploads/...) dianggap invalid karena file
+    // tidak persisten di standalone mode.
+    const logoImageUrl =
+      settings.logoImageUrl &&
+      (settings.logoImageUrl.startsWith("data:") || settings.logoImageUrl.startsWith("http"))
+        ? settings.logoImageUrl
+        : null;
+
+    return { ...settings, logoImageUrl };
   } catch {
     console.warn("[Settings Service] Database tidak tersedia, menggunakan data fallback.");
     return DEFAULT_SETTINGS;

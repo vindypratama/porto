@@ -4,6 +4,7 @@
  */
 
 import { getIconComponent } from "@/lib/icon-resolver";
+import LogoImage from "@/components/LogoImage";
 
 interface FooterProps {
   logoIcon?: string;
@@ -25,7 +26,15 @@ export default function Footer({
         {/* Brand */}
         <div className="flex items-center gap-2 text-slate-500 text-sm">
           {logoImageUrl ? (
-            <img src={logoImageUrl} alt="Logo" className="h-4 w-auto" />
+            <LogoImage
+              src={logoImageUrl}
+              alt="Logo"
+              className="h-4 w-auto"
+              fallbackIcon={logoIcon}
+              fallbackText={logoText}
+              iconSize={16}
+              iconClass="text-indigo-500"
+            />
           ) : (
             <>
               <LogoIcon size={16} className="text-indigo-500" />
